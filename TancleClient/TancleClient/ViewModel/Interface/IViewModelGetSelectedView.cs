@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseDataType
+namespace TancleClient.ViewModel.Interface
 {
-    public class Class1
+    public interface IViewModelGetSelectedView
     {
+        MenuViewModelBase GetSelectedView();
     }
 }

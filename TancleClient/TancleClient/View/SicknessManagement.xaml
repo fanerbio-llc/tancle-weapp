@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="TancleClient.View.SicknessManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TancleClient.View"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:l="clr-namespace:TancleClient.TranslationByMarkupExtension"
+             mc:Ignorable="d">
+    <Grid Name="MainGrid" Margin="0,0,0,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Label Height="Auto" Name="Title" VerticalAlignment="Top" FontWeight="Bold" FontSize="24" Content="{l:Translate View_SicknessManagement}" />
+
+        <DockPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,5,0,5">
+            <ContentControl Content="{Binding Path=Searcher, Mode=OneWay, Source={StaticResource Locator}}" ></ContentControl>
+        </DockPanel>
+
+        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="DisplayList"
+                    ItemsSource="{Binding DataList, Mode=OneWay}" 
+                    AlternationCount="0" 
+                    SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" AutoGenerateColumns="False" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding DbBackupRecordListSelectedChangeCommand}" 
+                                            CommandParameter="{Binding ElementName=DisplayList, Path=SelectedItem}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="Auto" Header="{l:Translate View_SickneessManagement_SickneessNo}" Binding="{Binding SicknessNo}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
+                <DataGridTextColumn Width="Auto" Header="{l:Translate View_SickneessManagement_SickneessName}" Binding="{Binding SicknessName}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
+                <DataGridTextColumn Width="Auto" Header="{l:Translate View_Header_CreatedTime}" Binding="{Binding CreatedTime, Converter={StaticResource DateTimeToStringConverter}}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
+                <DataGridTextColumn Width="Auto" Header="{l:Translate View_Header_UpdatedTime}" Binding="{Binding UpdatedTime, Converter={StaticResource DateTimeToStringConverter}}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DockPanel Grid.Column="0" Grid.Row="2" Name="ButtonPanelOfPage" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,5">
+            <ContentControl Content="{Binding Path=Paginator, Mode=OneWay, Source={StaticResource Locator}}"></ContentControl>
+        </DockPanel>
+
+        <StackPanel Grid.Column="1" Grid.Row="2" Name="ButtonPanel" VerticalAlignment="Bottom" 
+                    Orientation="Horizontal" HorizontalAlignment="Right" Margin="1,5">
+            <Button x:Name="BtnDbBackup" Margin="5,0" Content="123" 
+                    Command="{Binding DbBackupCommand}" />
+            <Button x:Name="BtnDbRestore" Content="456" 
+                    IsEnabled="{Binding BtnRestoreEnable}" Command="{Binding DbRestoreCommand}" Style="{DynamicResource btn-warning}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

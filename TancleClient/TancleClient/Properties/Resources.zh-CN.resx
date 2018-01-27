@@ -118,75 +118,75 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="View_AdviceManagement" xml:space="preserve">
-    <value>AdviceManagement</value>
+    <value>建议管理</value>
   </data>
   <data name="View_AdviceManagement_AdviceName" xml:space="preserve">
-    <value>AdviceName</value>
+    <value>建议名称</value>
   </data>
   <data name="View_AdviceManagement_AdviceNo" xml:space="preserve">
-    <value>AdviceNo</value>
+    <value>建议编号</value>
   </data>
   <data name="View_AdviceManagement_FindHint" xml:space="preserve">
-    <value>Input advice name to find</value>
+    <value>输入建议名称查找</value>
   </data>
   <data name="View_AreaManagement" xml:space="preserve">
-    <value>AreaManagement</value>
+    <value>区域管理</value>
   </data>
   <data name="View_AreaManagement_AreaName" xml:space="preserve">
-    <value>AreaName</value>
+    <value>区域名称</value>
   </data>
   <data name="View_AreaManagement_FindHint" xml:space="preserve">
-    <value>Input area name to find</value>
+    <value>输入区域名称查找</value>
   </data>
   <data name="View_AreaManagement_Id" xml:space="preserve">
     <value>ID</value>
   </data>
   <data name="View_Button_FirstPage" xml:space="preserve">
-    <value>First</value>
+    <value>首页</value>
   </data>
   <data name="View_Button_LastPage" xml:space="preserve">
-    <value>Last</value>
+    <value>尾页</value>
   </data>
   <data name="View_Button_NextPage" xml:space="preserve">
-    <value>Next</value>
+    <value>下一页</value>
   </data>
   <data name="View_Button_PreviousPage" xml:space="preserve">
-    <value>Previous</value>
+    <value>上一页</value>
   </data>
   <data name="View_HabitManagement" xml:space="preserve">
-    <value>HabitManagement</value>
+    <value>习惯管理</value>
   </data>
   <data name="View_HabitManagement_FindHint" xml:space="preserve">
-    <value>Input habit name to find</value>
+    <value>输入习惯名称查找</value>
   </data>
   <data name="View_HabitManagement_HabitName" xml:space="preserve">
-    <value>HabitName</value>
+    <value>习惯名称</value>
   </data>
   <data name="View_HabitManagement_HabitNo" xml:space="preserve">
-    <value>HabitNo</value>
+    <value>习惯编号</value>
   </data>
   <data name="View_Header_CreatedTime" xml:space="preserve">
-    <value>CreatedTime</value>
+    <value>创建时间</value>
   </data>
   <data name="View_Header_UpdatedTime" xml:space="preserve">
-    <value>UpdatedTime</value>
+    <value>更新时间</value>
   </data>
   <data name="View_SickneessManagement_SickneessName" xml:space="preserve">
-    <value>SickneessName</value>
+    <value>建议名称</value>
   </data>
   <data name="View_SickneessManagement_SickneessNo" xml:space="preserve">
-    <value>SickneessNo</value>
+    <value>建议编号</value>
   </data>
   <data name="View_SicknessManagement" xml:space="preserve">
-    <value>SicknessManagement</value>
+    <value>疾病管理</value>
   </data>
   <data name="View_SicknessManagement_FindHint" xml:space="preserve">
-    <value>Input sicknetss name to find</value>
+    <value>输入疾病名称查找</value>
   </data>
   <data name="View_Validation_SicknessName_Length" xml:space="preserve">
-    <value>The length of SicknessName must less than 200</value>
+    <value>疾病名称必须在200字符以内</value>
   </data>
   <data name="View_Validation_SicknessNo_Length" xml:space="preserve">
-    <value>The length of SicknessNo must less than 200</value>
+    <value>疾病编号必须在200字符以内</value>
   </data>
 </root>
