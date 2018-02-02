@@ -67,8 +67,20 @@
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmDialogs, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3d3b9708589bc73e, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmDialogs.4.0.0\lib\net45\MvvmDialogs.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -115,15 +127,27 @@
     <Compile Include="TranslationByMarkupExtension\TranslateExtension.cs" />
     <Compile Include="TranslationByMarkupExtension\TranslationData.cs" />
     <Compile Include="TranslationByMarkupExtension\TranslationManager.cs" />
-    <Compile Include="Utility\LogHelper.cs" />
+    <Compile Include="Utility\MessageBoxManager.cs" />
     <Compile Include="Utility\PasswordBoxHelper.cs" />
     <Compile Include="ViewModel\AdviceManagementViewModel.cs" />
+    <Compile Include="ViewModel\Implementation\ViewModelItemOperationImpl.cs" />
+    <Compile Include="ViewModel\Implementation\ViewModelPopUpWindowImpl.cs" />
     <Compile Include="ViewModel\Interface\IDisplayLanguageChange.cs" />
+    <Compile Include="ViewModel\Interface\IViewModelAddItem.cs" />
+    <Compile Include="ViewModel\Interface\IViewModelConfirmWindow.cs" />
+    <Compile Include="ViewModel\Interface\IViewModelDeleteItem.cs" />
+    <Compile Include="ViewModel\Interface\IViewModelErrorWindow.cs" />
     <Compile Include="ViewModel\Interface\IViewModelGetSelectedView.cs" />
+    <Compile Include="ViewModel\Interface\IViewModelHintWindow.cs" />
     <Compile Include="ViewModel\Interface\IViewModelPaginator.cs" />
+    <Compile Include="ViewModel\Interface\IViewModelSearcher.cs" />
     <Compile Include="ViewModel\Interface\IViewModelUpdateDisplayList.cs" />
+    <Compile Include="ViewModel\Interface\IViewModelUpdateItem.cs" />
+    <Compile Include="ViewModel\Interface\IViewModelValidateData.cs" />
     <Compile Include="ViewModel\PaginatorViewModel.cs" />
+    <Compile Include="ViewModel\SearcherViewModel.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
+    <Compile Include="View\Converter\InverseBooleanConverter.cs" />
     <Compile Include="View\Converter\NullToBoolConverter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MenuViewModelBase.cs" />
@@ -131,6 +155,7 @@
     <Compile Include="ViewModel\HabitManagementViewModel.cs" />
     <Compile Include="ViewModel\SicknessManagementViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Converter\StringTrimConverter.cs" />
     <Compile Include="View\Paginator.xaml.cs">
       <DependentUpon>Paginator.xaml</DependentUpon>
     </Compile>
@@ -142,6 +167,9 @@
     </Compile>
     <Compile Include="View\HabitManagement.xaml.cs">
       <DependentUpon>HabitManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Searcher.xaml.cs">
+      <DependentUpon>Searcher.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SicknessManagement.xaml.cs">
       <DependentUpon>SicknessManagement.xaml</DependentUpon>
@@ -218,6 +246,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\Searcher.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\SicknessManagement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -257,6 +289,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Base\BaseComponents\BaseCommonUtils\BaseCommonUtils.csproj">
+      <Project>{d9ec32c1-7e1b-4383-b016-a1989782145a}</Project>
+      <Name>BaseCommonUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Base\BaseComponents\BaseDataType\BaseDataType.csproj">
       <Project>{abd279c7-d0ea-4f63-9c9b-1db449575e49}</Project>
       <Name>BaseDataType</Name>
@@ -274,7 +310,6 @@
     <Folder Include="Dialog\" />
     <Folder Include="InternalMessage\" />
     <Folder Include="Validation\" />
-    <Folder Include="ViewModel\Implementation\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

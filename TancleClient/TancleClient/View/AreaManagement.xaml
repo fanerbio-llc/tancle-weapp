@@ -6,51 +6,126 @@
              xmlns:local="clr-namespace:TancleClient.View"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:l="clr-namespace:TancleClient.TranslationByMarkupExtension"
-             mc:Ignorable="d">
-    <Grid Name="MainGrid" Margin="0,0,0,16">
+             mc:Ignorable="d"
+             xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+             md:DialogServiceViews.IsRegistered="True">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="ListItemDetailDataTemplate">
+            <Grid Name="formGrid">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Height="Auto" Name="title" VerticalAlignment="Top" FontWeight="Bold" Content="{l:Translate View_AreaManagement_Detail}" />
+
+                        <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="1" Content="{l:Translate View_AreaManagement_AreaName}" Template="{DynamicResource LabelWithLeftStarSignTemplate}" />
+                        <TextBox Grid.Column="1" Grid.Row="2" Margin="5,2" MaxLength="200" Text="{Binding AreaName, Converter={StaticResource StringTrimConverter}}" IsReadOnly="{Binding IsDefault}" />
+                        <Path Grid.Column="2" Grid.Row="2" Style="{StaticResource glyphicon}" Data="{DynamicResource glyphicon-question-sign}" ToolTip="{l:Translate View_Validation_AreaName_Length}"></Path>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Name="MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="6*" />
+            <RowDefinition Height="4*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Label Height="Auto" Name="Title" VerticalAlignment="Top" FontWeight="Bold" FontSize="24" Content="{l:Translate View_AreaManagement}" />
 
-        <DockPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,5,0,5">
-            <ContentControl Content="{Binding Path=Searcher, Mode=OneWay, Source={StaticResource Locator}}" ></ContentControl>
-        </DockPanel>
+        <Grid Name="ListGrid" Margin="0,0,0,16" Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="DisplayList"
-                    ItemsSource="{Binding DataList, Mode=OneWay}" 
-                    AlternationCount="0" 
-                    SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" AutoGenerateColumns="False" >
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding DbBackupRecordListSelectedChangeCommand}" 
-                                            CommandParameter="{Binding ElementName=DisplayList, Path=SelectedItem}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="Auto" Header="{l:Translate View_AreaManagement_Id}" Binding="{Binding Id}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
-                <DataGridTextColumn Width="Auto" Header="{l:Translate View_AreaManagement_AreaName}" Binding="{Binding AreaName}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
-                <DataGridTextColumn Width="Auto" Header="{l:Translate View_Header_CreatedTime}" Binding="{Binding CreatedTime, Converter={StaticResource DateTimeToStringConverter}}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
-                <DataGridTextColumn Width="Auto" Header="{l:Translate View_Header_UpdatedTime}" Binding="{Binding UpdatedTime, Converter={StaticResource DateTimeToStringConverter}}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
-            </DataGrid.Columns>
-        </DataGrid>
+            <Label Height="Auto" Name="Title" VerticalAlignment="Top" FontWeight="Bold" FontSize="24" Content="{l:Translate View_AreaManagement}" />
 
-        <DockPanel Grid.Column="0" Grid.Row="2" Name="ButtonPanelOfPage" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,5">
-            <ContentControl Content="{Binding Path=Paginator, Mode=OneWay, Source={StaticResource Locator}}"></ContentControl>
-        </DockPanel>
+            <DockPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,5,0,5">
+                <ContentControl Content="{Binding Path=Searcher, Mode=OneWay, Source={StaticResource Locator}}"></ContentControl>
+            </DockPanel>
 
-        <StackPanel Grid.Column="1" Grid.Row="2" Name="ButtonPanel" VerticalAlignment="Bottom" 
-                    Orientation="Horizontal" HorizontalAlignment="Right" Margin="1,5">
-            <Button x:Name="BtnDbBackup" Margin="5,0" Content="123" 
-                    Command="{Binding DbBackupCommand}" />
-            <Button x:Name="BtnDbRestore" Content="456" 
-                    IsEnabled="{Binding BtnRestoreEnable}" Command="{Binding DbRestoreCommand}" Style="{DynamicResource btn-warning}" />
-        </StackPanel>
+            <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="DisplayList"
+                        ItemsSource="{Binding DataList, Mode=OneWay}" 
+                        AlternationCount="0" 
+                        SelectionMode="Single" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" AutoGenerateColumns="False" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding ListItemSelectedChangeCommand}" 
+                                                CommandParameter="{Binding ElementName=DisplayList, Path=SelectedItem}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="Auto" Header="{l:Translate View_AreaManagement_AreaName}" Binding="{Binding AreaName}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
+                    <DataGridTextColumn Width="Auto" Header="{l:Translate View_Header_CreatedTime}" Binding="{Binding CreatedTime, Converter={StaticResource DateTimeToStringConverter}}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
+                    <DataGridTextColumn Width="Auto" Header="{l:Translate View_Header_UpdatedTime}" Binding="{Binding UpdatedTime, Converter={StaticResource DateTimeToStringConverter}}" IsReadOnly="True" ElementStyle="{StaticResource DataGridTextCenter}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <DockPanel Grid.Column="0" Grid.Row="2" Name="ButtonPanelOfPage" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0,5">
+                <ContentControl Content="{Binding Path=Paginator, Mode=OneWay, Source={StaticResource Locator}}"></ContentControl>
+            </DockPanel>
+
+            <StackPanel Grid.Column="1" Grid.Row="2" Name="ButtonPanel" VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="1,5">
+                <Button x:Name="BtnDelete" Margin="5,0" Content="{l:Translate View_Button_Delete}" Command="{Binding DeleteCommand}" Style="{DynamicResource btn-danger}" />
+                <Button x:Name="BtnCreate" Content="{l:Translate View_Button_Create}" Command="{Binding CreateCommand}" />
+            </StackPanel>
+        </Grid>
+
+        <Rectangle Height="16" VerticalAlignment="bottom" >
+            <Shape.Fill>
+                <RadialGradientBrush>
+                    <GradientBrush.GradientStops>
+                        <GradientStopCollection>
+                            <GradientStop Color="sc#0.300000, 0.000000, 0.000000, 0.000000" Offset="0.019230769230769232" />
+                            <GradientStop Color="sc#1.000000, 0.769689, 0.831936, 1.000000" Offset="1" />
+                        </GradientStopCollection>
+                    </GradientBrush.GradientStops>
+                    <Brush.RelativeTransform>
+                        <TransformGroup>
+                            <TransformGroup.Children>
+                                <TransformCollection>
+                                    <TranslateTransform X="-0.0052816901408450721" Y="0.5185185185185186" />
+                                </TransformCollection>
+                            </TransformGroup.Children>
+                        </TransformGroup>
+                    </Brush.RelativeTransform>
+                </RadialGradientBrush>
+            </Shape.Fill>
+        </Rectangle>
+        <GridSplitter Opacity="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Width="Auto" Height="5" Background="White" Cursor="SizeNS"/>
+
+        <Grid Name="ListItemFormGrid" Margin="0" Grid.Row="1" Grid.Column="0"
+                  IsEnabled="{Binding EditItem, Converter={StaticResource N2BCvtr}}" VerticalAlignment="Top">
+            <UserControl x:Name="ListItemForm" 
+                    ContentTemplate="{StaticResource ListItemDetailDataTemplate}" 
+                    Content="{Binding EditItem}" 
+                    BorderBrush="Black" VerticalAlignment="Center"/>
+        </Grid>
+
+        <Grid Grid.Row="2" IsEnabled="{Binding EditItem, Converter={StaticResource N2BCvtr}}">
+            <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="1,5">
+                <Button Name="BtnUpdate" Margin="2,0" 
+                            Content="{l:Translate View_Button_Update}" 
+                            Command="{Binding UpdateCommand}"
+                            Style="{DynamicResource btn-warning}"/>
+                <Button Name="BtnCancel" Margin="5,0" Content="{l:Translate View_Button_Cancel}" Command="{Binding CancelCommand}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

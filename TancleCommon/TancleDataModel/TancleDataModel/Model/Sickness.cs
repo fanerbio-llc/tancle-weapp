@@ -10,8 +10,45 @@ using TancleDataModel.Interface;
 
 namespace TancleDataModel.Model
 {
-    public class Sickness: IDataValidatable, IOperationRecordEntity
+    public class Sickness: IDataValidatable, IOperationRecordEntity, ICloneable, ICopyable<Sickness>
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
+        [Required]
+        [MinLength(2), MaxLength(50)]
+        public string SicknessNo { get; set; }
+
+        [Required]
+        [MinLength(2), MaxLength(200)]
+        public string SicknessName { get; set; }
+
+        public DateTime CreatedTime { get; set; }
+
+        public DateTime UpdatedTime { get; set; }
+
+        public virtual ICollection<Habit> Habits { get; set; }
+
+        public virtual ICollection<Area> Areas { get; set; }
+
+        public virtual ICollection<Advice> Advice { get; set; }
+
+        public object Clone()
+        {
+            Sickness newItem = new Sickness();
+            CopyTo(newItem);
+            return newItem;
+        }
+
+        public void CopyTo(Sickness destination)
+        {
+            destination.Id = Id;
+            destination.SicknessNo = SicknessNo;
+            destination.SicknessName = SicknessName;
+            destination.CreatedTime = CreatedTime;
+            destination.UpdatedTime = UpdatedTime;
+        }
+
         public ValidationResults Validate()
         {
             ValidationFactory.SetDefaultConfigurationValidatorFactory(new FileConfigurationSource("Validation/SicknessValidation.config"));
@@ -23,38 +60,9 @@ namespace TancleDataModel.Model
             return Validation.Validate(this, ruleSet);
         }
 
-
-
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
-        [MaxLength(200)]
-        public string SicknessNo { get; set; }
-
-        [MaxLength(200)]
-        public string SicknessName { get; set; }
-
-        [MaxLength(50)]
-        public DateTime CreatedTime { get; set; }
-
-        [MaxLength(200)]
-        public DateTime UpdatedTime { get; set; }
-
-
-        public override string ToString()
+        public string ToString(string placeHolder)
         {
-            StringBuilder buffer = new StringBuilder();
-
-            //buffer.AppendLine($"{Resources.Site_HospitalName}: {HospitalName}");
-            //buffer.AppendLine($"{Resources.Site_HospitalAddress}: {HospitalAddress}");
-            //buffer.AppendLine($"{Resources.Site_Phone}: {Phone}");
-            //buffer.AppendLine($"{Resources.Site_Manufacture}: {Manufacture}");
-            //buffer.AppendLine($"{Resources.Site_ModelName}: {ModelName}");
-            //buffer.AppendLine($"{Resources.Site_SeriesNumber}: {SeriesNumber}");
-            //buffer.AppendLine($"{Resources.Site_SoftwareVersion}: {SoftwareVersion}");
-            //buffer.AppendLine($"{Resources.Site_FirmwareVersion}: {FirmwareVersion}");
-
-            return buffer.ToString();
+            return string.Format(placeHolder, SicknessNo, SicknessName, CreatedTime, UpdatedTime);
         }
 
         public string RecordActionName()

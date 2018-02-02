@@ -126,8 +126,14 @@
   <data name="View_AdviceManagement_AdviceNo" xml:space="preserve">
     <value>AdviceNo</value>
   </data>
+  <data name="View_AdviceManagement_Detail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
   <data name="View_AdviceManagement_FindHint" xml:space="preserve">
     <value>Input advice name to find</value>
+  </data>
+  <data name="View_Application_Title" xml:space="preserve">
+    <value>Tancle Accurate Genetic Test Platform</value>
   </data>
   <data name="View_AreaManagement" xml:space="preserve">
     <value>AreaManagement</value>
@@ -135,11 +141,23 @@
   <data name="View_AreaManagement_AreaName" xml:space="preserve">
     <value>AreaName</value>
   </data>
+  <data name="View_AreaManagement_Detail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
   <data name="View_AreaManagement_FindHint" xml:space="preserve">
     <value>Input area name to find</value>
   </data>
   <data name="View_AreaManagement_Id" xml:space="preserve">
     <value>ID</value>
+  </data>
+  <data name="View_Button_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="View_Button_Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="View_Button_Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="View_Button_FirstPage" xml:space="preserve">
     <value>First</value>
@@ -153,8 +171,17 @@
   <data name="View_Button_PreviousPage" xml:space="preserve">
     <value>Previous</value>
   </data>
+  <data name="View_Button_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="View_Button_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
   <data name="View_HabitManagement" xml:space="preserve">
     <value>HabitManagement</value>
+  </data>
+  <data name="View_HabitManagement_Detail" xml:space="preserve">
+    <value>Detail</value>
   </data>
   <data name="View_HabitManagement_FindHint" xml:space="preserve">
     <value>Input habit name to find</value>
@@ -171,22 +198,121 @@
   <data name="View_Header_UpdatedTime" xml:space="preserve">
     <value>UpdatedTime</value>
   </data>
-  <data name="View_SickneessManagement_SickneessName" xml:space="preserve">
+  <data name="View_Messagebox_Button_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="View_Messagebox_Button_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="View_Messagebox_Button_Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="View_Messagebox_Button_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="View_Messagebox_CannotAdd" xml:space="preserve">
+    <value>Cannot add</value>
+  </data>
+  <data name="View_Messagebox_CannotDelete" xml:space="preserve">
+    <value>Cannot delete</value>
+  </data>
+  <data name="View_Messagebox_CannotUpdate" xml:space="preserve">
+    <value>Cannot update</value>
+  </data>
+  <data name="View_Messagebox_ConfirmToAdd" xml:space="preserve">
+    <value>Confirm to add</value>
+  </data>
+  <data name="View_Messagebox_ConfirmToDelete" xml:space="preserve">
+    <value>Confirm to delete</value>
+  </data>
+  <data name="View_Messagebox_ConfirmToUpdate" xml:space="preserve">
+    <value>Confirm to update</value>
+  </data>
+  <data name="View_Messagebox_DeleteAlready" xml:space="preserve">
+    <value>Delete Already</value>
+  </data>
+  <data name="View_Messagebox_ExistAlready" xml:space="preserve">
+    <value>Exist Already</value>
+  </data>
+  <data name="View_Messagebox_QueryDatabaseFailure" xml:space="preserve">
+    <value>Query Database failure!</value>
+  </data>
+  <data name="View_Messagebox_Reason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="View_Messagebox_Success" xml:space="preserve">
+    <value>Update role failure</value>
+  </data>
+  <data name="View_Paginator_HintText" xml:space="preserve">
+    <value>当前第 {0}/{1} 页，共 {2} 条记录，每页 {3} 条</value>
+  </data>
+  <data name="View_Paginator_HintText1" xml:space="preserve">
+    <value>Current at</value>
+  </data>
+  <data name="View_Paginator_HintText2" xml:space="preserve">
+    <value>Page, Totally</value>
+  </data>
+  <data name="View_Paginator_HintText3" xml:space="preserve">
+    <value>items,</value>
+  </data>
+  <data name="View_Paginator_HintText4" xml:space="preserve">
+    <value>items per page</value>
+  </data>
+  <data name="View_SickneessManagement_SicknessName" xml:space="preserve">
     <value>SickneessName</value>
   </data>
-  <data name="View_SickneessManagement_SickneessNo" xml:space="preserve">
+  <data name="View_SickneessManagement_SicknessNo" xml:space="preserve">
     <value>SickneessNo</value>
   </data>
   <data name="View_SicknessManagement" xml:space="preserve">
     <value>SicknessManagement</value>
   </data>
+  <data name="View_SicknessManagement_Detail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
   <data name="View_SicknessManagement_FindHint" xml:space="preserve">
     <value>Input sicknetss name to find</value>
   </data>
+  <data name="View_Validation_AdviceName_Length" xml:space="preserve">
+    <value>The length of AdviceName must be 2~200</value>
+  </data>
+  <data name="View_Validation_AdviceName_NotNull" xml:space="preserve">
+    <value>AdviceName should not be null</value>
+  </data>
+  <data name="View_Validation_AdviceNo_Length" xml:space="preserve">
+    <value>The length of AdviceNo must be 2~50</value>
+  </data>
+  <data name="View_Validation_AdviceNo_NotNull" xml:space="preserve">
+    <value>AdviceNo should not be null</value>
+  </data>
+  <data name="View_Validation_AreaName_Length" xml:space="preserve">
+    <value>The length of AreaName must be 2~50</value>
+  </data>
+  <data name="View_Validation_AreaName_NotNull" xml:space="preserve">
+    <value>AreaName should not be null</value>
+  </data>
+  <data name="View_Validation_HabitName_Length" xml:space="preserve">
+    <value>The length of HabitName must be 2~200</value>
+  </data>
+  <data name="View_Validation_HabitName_NotNull" xml:space="preserve">
+    <value>HabitNo should not be null</value>
+  </data>
+  <data name="View_Validation_HabitNo_Length" xml:space="preserve">
+    <value>The length of HabitNo must be 2~50</value>
+  </data>
+  <data name="View_Validation_HabitNo_NotNull" xml:space="preserve">
+    <value>HabitNo should not be null</value>
+  </data>
   <data name="View_Validation_SicknessName_Length" xml:space="preserve">
-    <value>The length of SicknessName must less than 200</value>
+    <value>The length of SicknessName must be 2~200</value>
+  </data>
+  <data name="View_Validation_SicknessName_NotNull" xml:space="preserve">
+    <value>SicknessName should not be null</value>
   </data>
   <data name="View_Validation_SicknessNo_Length" xml:space="preserve">
-    <value>The length of SicknessNo must less than 200</value>
+    <value>The length of SicknessNo must be 2~50</value>
+  </data>
+  <data name="View_Validation_SicknessNo_NotNull" xml:space="preserve">
+    <value>SicknessNo should not be null</value>
   </data>
 </root>

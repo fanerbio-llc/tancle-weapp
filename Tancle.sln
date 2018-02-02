@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseDataType", "Base\BaseCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TancleClientSimulator", "Tools\TancleClientSimulator\TancleClientSimulator.csproj", "{022C2ED8-3A52-4E2E-97B1-F62A4027414C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseCommonUtils", "Base\BaseComponents\BaseCommonUtils\BaseCommonUtils.csproj", "{D9EC32C1-7E1B-4383-B016-A1989782145A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{022C2ED8-3A52-4E2E-97B1-F62A4027414C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{022C2ED8-3A52-4E2E-97B1-F62A4027414C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{022C2ED8-3A52-4E2E-97B1-F62A4027414C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9EC32C1-7E1B-4383-B016-A1989782145A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9EC32C1-7E1B-4383-B016-A1989782145A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9EC32C1-7E1B-4383-B016-A1989782145A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9EC32C1-7E1B-4383-B016-A1989782145A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{56EA188C-C78A-4B46-A815-0A4D3A8F6DC2} = {5D10C5B6-6FE7-469A-AC57-DBDDB3F50324}
 		{ABD279C7-D0EA-4F63-9C9B-1DB449575E49} = {26FFCF0C-1F92-4303-A4D9-A26A06249F23}
 		{022C2ED8-3A52-4E2E-97B1-F62A4027414C} = {7FBFE88B-491A-48CF-B741-8DD9A2FA4081}
+		{D9EC32C1-7E1B-4383-B016-A1989782145A} = {26FFCF0C-1F92-4303-A4D9-A26A06249F23}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Validation.6.0.1304.0\lib\NET45

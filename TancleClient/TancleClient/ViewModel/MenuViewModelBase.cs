@@ -42,7 +42,7 @@ namespace TancleClient.ViewModel
             }
         }
 
-        protected string SearchHintText = "";
+        public string SearchHintText = "";
 
         public virtual void DisplayTitle()
         {

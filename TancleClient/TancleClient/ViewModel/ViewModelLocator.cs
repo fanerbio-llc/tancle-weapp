@@ -17,7 +17,14 @@ using Autofac.Extras.CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using MvvmDialogs;
 using TancleClient.Service;
+using TancleClient.ViewModel.Implementation;
+using TancleClient.ViewModel.Interface;
+using TancleDataModel;
+using TancleDataModel.Implementation;
+using TancleDataModel.Interface;
+using TancleDataModel.Model;
 
 namespace TancleClient.ViewModel
 {
@@ -38,17 +45,48 @@ namespace TancleClient.ViewModel
             #region Register relevant service
 
             builder.RegisterType<TranslationService>().As<ITranslationService>().SingleInstance();
-
+            builder.RegisterType<DialogService>().As<IDialogService>().SingleInstance();
             #endregion
 
             #region Register viewmodel
 
-            builder.RegisterType<MainViewModel>().As<MainViewModel>().SingleInstance();
+            // Views
+            builder.RegisterType<MainViewModel>()
+                .As<MainViewModel>()
+                .As<IViewModelGetSelectedView>()
+                .SingleInstance();
+
             builder.RegisterType<SicknessManagementViewModel>().As<SicknessManagementViewModel>().SingleInstance();
             builder.RegisterType<HabitManagementViewModel>().As<HabitManagementViewModel>().SingleInstance();
             builder.RegisterType<AreaManagementViewModel>().As<AreaManagementViewModel>().SingleInstance();
             builder.RegisterType<AdviceManagementViewModel>().As<AdviceManagementViewModel>().SingleInstance();
 
+            // Components
+            builder.RegisterType<SearcherViewModel>().As<SearcherViewModel>().As<IViewModelSearcher>().SingleInstance();
+            builder.RegisterType<PaginatorViewModel>().As<PaginatorViewModel>().As<IViewModelPaginator>().SingleInstance();
+
+            builder.RegisterType<ViewModelPopUpWindowImpl>()
+                .As<IViewModelConfirmWindow>()
+                .As<IViewModelHintWindow>()
+                .As<IViewModelErrorWindow>()
+                .SingleInstance();
+
+            builder.RegisterType<ViewModelItemOperationImpl>()
+                .As<IViewModelAddItem>()
+                .As<IViewModelUpdateItem>()
+                .As<IViewModelDeleteItem>()
+                .As<IViewModelValidateData>()
+                .SingleInstance();
+            #endregion
+
+            #region Register data access service
+
+            builder.RegisterType<GetTancleConfigDbContextImpl>().As<IGetDbContext<TancleConfigDbContext>>().SingleInstance();
+
+            builder.RegisterType<DataAccessServiceGeneric<TancleConfigDbContext, Sickness>>().SingleInstance();
+            builder.RegisterType<DataAccessServiceGeneric<TancleConfigDbContext, Habit>>().SingleInstance();
+            builder.RegisterType<DataAccessServiceGeneric<TancleConfigDbContext, Advice>>().SingleInstance();
+            builder.RegisterType<DataAccessServiceGeneric<TancleConfigDbContext, Area>>().SingleInstance();
             #endregion
 
             // Perform registrations and build the container. 
@@ -66,9 +104,21 @@ namespace TancleClient.ViewModel
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-        
 
+        public SearcherViewModel Searcher
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<SearcherViewModel>();
+            }
+        }
 
-
+        public PaginatorViewModel Paginator
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<PaginatorViewModel>();
+            }
+        }
     }
 }

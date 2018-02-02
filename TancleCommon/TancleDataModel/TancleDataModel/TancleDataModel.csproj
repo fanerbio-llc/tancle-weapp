@@ -38,6 +38,10 @@
       <HintPath>..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
       <Private>True</Private>
@@ -57,21 +61,52 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Implementation\DataAccessResult.cs" />
+    <Compile Include="Implementation\DataAccessServiceGeneric.cs" />
+    <Compile Include="Implementation\BaseDataAccessService.cs" />
+    <Compile Include="Implementation\DataAccessGenericImpl.cs" />
+    <Compile Include="Implementation\GetTancleConfigDbContextImpl.cs" />
+    <Compile Include="Implementation\TancleDbContext.cs" />
+    <Compile Include="Interface\IAddTuple.cs" />
+    <Compile Include="Interface\ICopyable.cs" />
     <Compile Include="Interface\IDataValidatable.cs" />
+    <Compile Include="Interface\IDeleteTuple.cs" />
+    <Compile Include="Interface\IGetDbContext.cs" />
+    <Compile Include="Interface\ILoadTuple.cs" />
+    <Compile Include="Interface\IModifyTuple.cs" />
     <Compile Include="Interface\IOperationRecordEntity.cs" />
     <Compile Include="Model\Advice.cs" />
     <Compile Include="Model\Area.cs" />
     <Compile Include="Model\Habit.cs" />
     <Compile Include="Model\Sickness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TancleConfigDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Validation\SicknessValidation.config" />
+    <None Include="Validation\HabitValidation.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Validation\AreaValidation.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Validation\AdviceValidation.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Validation\SicknessValidation.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Implementation\" />
+    <Folder Include="DataAccessService\" />
+    <Folder Include="IDataAccessService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Base\BaseComponents\BaseCommonUtils\BaseCommonUtils.csproj">
+      <Project>{d9ec32c1-7e1b-4383-b016-a1989782145a}</Project>
+      <Name>BaseCommonUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

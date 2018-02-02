@@ -1,11 +1,16 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using TancleClient.Service;
+using TancleClient.ViewModel.Interface;
+using TancleDataModel;
+using TancleDataModel.Implementation;
 using TancleDataModel.Model;
 
 namespace TancleClient.ViewModel
@@ -16,7 +21,11 @@ namespace TancleClient.ViewModel
 
         private static readonly ITranslationService TranslationService = ServiceLocator.Current.GetInstance<ITranslationService>();
 
+        private static readonly DataAccessServiceGeneric<TancleConfigDbContext, Sickness> DataService =
+            ServiceLocator.Current.GetInstance<DataAccessServiceGeneric<TancleConfigDbContext, Sickness>>();
+
         private ObservableCollection<Sickness> _dataList;
+        private Sickness _editItem;
         private Sickness _selectedItem;
         #endregion
 
@@ -41,20 +50,27 @@ namespace TancleClient.ViewModel
                 this.RaisePropertyChanged("SelectedItem");
             }
         }
+
+        public Sickness EditItem
+        {
+            get { return _editItem; }
+            set
+            {
+                _editItem = value;
+                this.RaisePropertyChanged("EditItem");
+            }
+        }
         #endregion
 
         #region Constructors
 
         public SicknessManagementViewModel()
         {
-            //DataList = new ObservableCollection<Sickness>();
-            DataList = new ObservableCollection<Sickness>()
-            {
-                new Sickness {Id=1,SicknessNo="A001",SicknessName="糖尿病",CreatedTime=DateTime.Now,UpdatedTime=DateTime.Now },
-                new Sickness {Id=2,SicknessNo="A002",SicknessName="肺癌",CreatedTime=DateTime.Now,UpdatedTime=DateTime.Now },
-                new Sickness {Id=3,SicknessNo="A003",SicknessName="肾衰竭",CreatedTime=DateTime.Now,UpdatedTime=DateTime.Now },
-            };
-
+            CreateCommand = new RelayCommand(BtnCreateClick);
+            DeleteCommand = new RelayCommand(BtnDeleteClick, () => SelectedItem != null);
+            UpdateCommand = new RelayCommand(BtnUpdateClick);
+            CancelCommand = new RelayCommand(BtnCancelClick);
+            ListItemSelectedChangeCommand = new RelayCommand<Sickness>(ListItemSelectedChange);
         }
         #endregion
 
@@ -63,21 +79,163 @@ namespace TancleClient.ViewModel
         public override void DisplayTitle()
         {
             Title = TranslationService.Translate("View_SicknessManagement").ToString();
-            SearchHintText = TranslationService.Translate("View_SicknessManagement_FindHint").ToString();
-            Icon =
-    "F1 M 51.0065,41.0057C 54.3207,41.0057 57.0074,43.3939 57.0074,46.3398C 57.0074,46.8003 56.9418,47.2471 56.8183,47.6733L 51.0065,57.008L 45.1948,47.6733C 45.0714,47.2471 45.0057,46.8003 45.0057,46.3398C 45.0057,43.3939 47.6924,41.0057 51.0065,41.0057 Z M 51.0065,44.6729C 50.0859,44.6729 49.3396,45.4192 49.3396,46.3398C 49.3396,47.2604 50.0859,48.0067 51.0065,48.0067C 51.9272,48.0067 52.6734,47.2604 52.6734,46.3398C 52.6734,45.4192 51.9272,44.6729 51.0065,44.6729 Z M 24.0033,56.0078L 24.0033,38.0053L 22.0031,40.0056L 19.0027,35.0049L 38.0053,20.0028L 45.0063,25.5299L 45.0063,21.753L 49.0068,21.0029L 49.0068,28.6882L 57.0079,35.0049L 54.2034,39.6791L 53.4199,39.4179L 52.0073,38.0053L 52.0073,39.1438L 51.0065,39.0887C 50.3161,39.0887 49.646,39.1664 49.0068,39.3126L 49.0068,36.005L 38.0053,26.9205L 27.0038,36.005L 27.0038,53.0074L 33.0046,53.0074L 33.0046,42.006L 43.006,42.006L 43.006,46.283L 43.006,53.0074L 46.3883,53.0074L 48.2564,56.0078L 24.0033,56.0078 Z ";
-
+            SearchHintText = TranslationService.Translate("View_SicknessManagement_SearchHint").ToString();
+            Icon = "M8.99124145507813,8.35562705993652L8.99124145507813,10.8775024414063 6.46875381469727,10.8775024414063 6.46875381469727,12.8956270217896 8.99124145507813,12.8956270217896 8.99124145507813,15.4181108474731 11.0087585449219,15.4181108474731 11.0087585449219,12.8956270217896 13.5312461853027,12.8956270217896 13.5312461853027,10.8775024414063 11.0087585449219,10.8775024414063 11.0087585449219,8.35562705993652 8.99124145507813,8.35562705993652z M0,7.31436824798584L20,7.31436824798584 20,16.4599990844727 0,16.4599990844727 0,7.31436824798584z M0,0L8.05624008178711,0 8.05624008178711,2.06001043319702 20,2.06001043319702 20,4.55375146865845 0,4.55375146865845 0,2.46812558174133 0,2.06001043319702 0,0z";
         }
 
         public override void UpdateDataList(int pageIndex, out int total, int itemPerPage = 10)
         {
             DataList?.Clear();
-            SelectedItem = null;
 
-            total = 0;
+            IEnumerable<Sickness> tempList;
 
+            var searcher = ServiceLocator.Current.GetInstance<IViewModelSearcher>();
+            if (searcher.Search())
+            {
+                var searchText = searcher.GetSearchText();
+                tempList = DataService.LoadPageTuples(
+                    pageIndex,
+                    itemPerPage,
+                    out total,
+                    x => x.SicknessName.Contains(searchText),
+                    true,
+                    x => x.SicknessNo);
+            }
+            else
+            {
+                tempList = DataService.LoadPageTuples(
+                    pageIndex,
+                    itemPerPage,
+                    out total,
+                    x => x.Id > 0,
+                    true,
+                    x => x.SicknessNo);
+            }
+
+            if (tempList == null)
+            {
+                DataList = null;
+                return;
+            }
+
+            DataList = new ObservableCollection<Sickness>(tempList);
+        }
+        #endregion
+
+        #region Command definitions
+
+        public ICommand CreateCommand { get; private set; }
+
+        public ICommand DeleteCommand { get; private set; }
+
+        public ICommand UpdateCommand { get; private set; }
+
+        public ICommand CancelCommand { get; private set; }
+
+        public ICommand ListItemSelectedChangeCommand { get; private set; }
+        #endregion
+
+        #region Commmand implementations
+
+        private void DeselectItemInDataList()
+        {
+            var tempList = DataList;
+            DataList = null;
+            DataList = tempList;
         }
 
+        private string GetPlaceHolder()
+        {
+            StringBuilder placeHolder = new StringBuilder();
+            placeHolder.AppendLine($"{TranslationService.Translate("View_SicknessManagement_SicknessNo")}: {{0}}");
+            placeHolder.AppendLine($"{TranslationService.Translate("View_SicknessManagement_SicknessName")}: {{1}}");
+            placeHolder.AppendLine($"{TranslationService.Translate("View_Header_CreatedTime")}: {{2}}");
+            placeHolder.AppendLine($"{TranslationService.Translate("View_Header_UpdatedTime")}: {{3}}");
+            return placeHolder.ToString();
+        }
+
+        private void BtnCreateClick()
+        {
+            SelectedItem = null;
+            DeselectItemInDataList();
+            EditItem = new Sickness();
+        }
+
+        private void BtnDeleteClick()
+        {
+            if (EditItem == null)
+            {
+                return;
+            }
+
+            if (ServiceLocator.Current.GetInstance<IViewModelDeleteItem>().Delete(
+                dataService: DataService,
+                entityId: EditItem.Id,
+                popUpText: EditItem.ToString(GetPlaceHolder()),
+                popUpConfirm: true))
+            {
+                SelectedItem = null;
+                EditItem = null;
+            }
+
+            ServiceLocator.Current.GetInstance<IViewModelPaginator>().UpdateDataList(this);
+        }
+
+        private void BtnUpdateClick()
+        {
+            if (EditItem == null)
+            {
+                return;
+            }
+
+            if (EditItem.Id == 0)
+            {
+                // Create new item, add create time and update time
+                EditItem.CreatedTime = DateTime.Now;
+                EditItem.UpdatedTime = DateTime.Now;
+            }
+            else
+            {
+                // Update exsist data, modify update time only
+                EditItem.UpdatedTime = DateTime.Now;
+            }
+
+            if (ServiceLocator.Current.GetInstance<IViewModelValidateData>().Validate(EditItem))
+            {
+                var result = EditItem.Id == 0 ?
+                    ServiceLocator.Current.GetInstance<IViewModelAddItem>().Add(
+                        dataService: DataService,
+                        entity: EditItem,
+                        popUpText: EditItem.ToString(GetPlaceHolder()),
+                        popUpConfirm: true)
+                    : ServiceLocator.Current.GetInstance<IViewModelUpdateItem>().Update(
+                        dataService: DataService,
+                        entityId: EditItem.Id,
+                        popUpText: EditItem.ToString(GetPlaceHolder()),
+                        copyImpl: EditItem,
+                        popUpConfirm: true);
+
+                if (result)
+                {
+                    EditItem = null;
+                }
+            }
+
+            ServiceLocator.Current.GetInstance<IViewModelPaginator>().UpdateDataList(this);
+        }
+
+        private void BtnCancelClick()
+        {
+            SelectedItem = null;
+            DeselectItemInDataList();
+            EditItem = null;
+        }
+
+        private void ListItemSelectedChange(Sickness sickness)
+        {
+            SelectedItem = sickness;
+            EditItem = sickness?.Clone() as Sickness;
+        }
         #endregion
     }
 }

@@ -7,8 +7,9 @@
         mc:Ignorable="d"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
-        Title="Tancle基因诊断分析平台" Width="1024" Height="768"
         xmlns:vm="clr-namespace:TancleClient.ViewModel"
+        xmlns:l="clr-namespace:TancleClient.TranslationByMarkupExtension"
+        Title="{l:Translate View_Application_Title}" Width="1024" Height="768"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
 
     <Window.Resources>
@@ -31,7 +32,7 @@
                     <StackPanel Orientation="Vertical">
                         <Canvas x:Name="menu_icon" Width="60" Height="60" Clip="F1 M 0,0L 76,0L 76,76L 0,76L 0,0">
                             <Path Width="40" Height="40" Canvas.Left="10" Canvas.Top="16" Stretch="Fill" Fill="#FF000000" 
-                                  Data="{Binding Icon}"/>
+                                  Data="{Binding Icon}" />
                         </Canvas>
                         <TextBlock x:Name="menu_text" HorizontalAlignment="Center" Text="{Binding Title}"/>
                     </StackPanel>
@@ -72,9 +73,9 @@
                 </i:Interaction.Triggers>
             </ListBox>
             
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            <!--<Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-            <ListBox x:Name="SystemListBox" BorderThickness="0"
+            <ListBox x:Name="RunningListBox" BorderThickness="0"
                          ItemsSource="{Binding Main.ViewsOfRunning, Source={StaticResource Locator}}" 
                          ItemTemplate="{DynamicResource MenuButton}"  
                          IsSynchronizedWithCurrentItem="False" 
@@ -91,10 +92,10 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding Main.ViewSelectedChangeCommand}"
-                            CommandParameter="{Binding ElementName=SystemListBox, Path=SelectedItem}" />
+                            CommandParameter="{Binding ElementName=RunningListBox, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </ListBox>
+            </ListBox>-->
         </DockPanel>
 
         <Grid Grid.Row="1" Background="sc#1.000000, 0.769689, 0.831936, 1.000000" x:Name="DocumentRoot">

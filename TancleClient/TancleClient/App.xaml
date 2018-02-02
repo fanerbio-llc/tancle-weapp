@@ -11,6 +11,8 @@
         <ResourceDictionary>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:TancleClient.ViewModel" />
             <cvt:NullToBoolConverter x:Key="N2BCvtr"/>
+            <cvt:InverseBooleanConverter x:Key="InverseBCvtr"/>
+            <cvt:StringTrimConverter x:Key="StringTrimConverter"/>
             <cvt:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
 
             <ResourceDictionary.MergedDictionaries>

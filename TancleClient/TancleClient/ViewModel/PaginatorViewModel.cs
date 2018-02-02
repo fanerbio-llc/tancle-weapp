@@ -1,13 +1,15 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
- using TancleClient.ViewModel.Interface;
+using TancleClient.ViewModel.Interface;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
+using TancleClient.Service;
+using BaseCommonUtils.Common;
 
 namespace TancleClient.ViewModel
 {
@@ -16,15 +18,16 @@ namespace TancleClient.ViewModel
     /// </summary>
     public class PaginatorViewModel : ViewModelBase, IViewModelPaginator
     {
-        public static readonly log4net.ILog Log = log4net.LogManager.GetLogger
-            (System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
         #region Private fields
+
+        private static readonly ITranslationService TranslationService = ServiceLocator.Current.GetInstance<ITranslationService>();
 
         private int _currentPageIndex;
         private int _totalPage;
         private int _itemPerPage;
         private int _total;
+
+        private string _hintText;
 
         private bool _firstBtnEnable;
         private bool _prevBtnEnable;
@@ -86,6 +89,19 @@ namespace TancleClient.ViewModel
             }
         }
 
+        /// <summary>
+        /// Display current item and page detail information
+        /// </summary>
+        public string HintText
+        {
+            get { return _hintText; }
+            set
+            {
+                _hintText = value;
+                this.RaisePropertyChanged("HintText");
+            }
+        }
+
         public bool FirstBtnEnable
         {
             get { return _firstBtnEnable; }
@@ -138,17 +154,21 @@ namespace TancleClient.ViewModel
         public PaginatorViewModel()
         {
             CurrentPageIndex = FirstPageNumber;
-            TotalPage = 0;
+            TotalPage = 1;
             ItemPerPage = 10;
             Total = 0;
 
-            // Below line will cause UpdateDisplayList call twice, one is ViewSelectedChange in MainViewModel, really need it?
-            //UpdateDisplayList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
+            HintText = string.Format(
+                TranslationService.Translate("View_Paginator_HintText")?.ToString(),
+                CurrentPageIndex, TotalPage, Total, ItemPerPage);
 
             FirstCommand = new RelayCommand(BtnFirst_Click);
             PrevCommand = new RelayCommand(BtnPrev_Click);
             NextCommand = new RelayCommand(BtnNext_Click);
             LastCommand = new RelayCommand(BtnLast_Click);
+
+            // Query data for selected view
+            UpdateDataList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
         }
 
         #endregion
@@ -183,7 +203,7 @@ namespace TancleClient.ViewModel
             // Display the first page
 
             CurrentPageIndex = FirstPageNumber;
-            UpdateDisplayList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
+            UpdateDataList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
         }
         /// <summary>
         /// "Previous Page" button is clicked, update display list.
@@ -195,7 +215,7 @@ namespace TancleClient.ViewModel
             if (CurrentPageIndex > FirstPageNumber)
             {
                 CurrentPageIndex--;
-                UpdateDisplayList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
+                UpdateDataList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
             }
         }
         /// <summary>
@@ -208,7 +228,7 @@ namespace TancleClient.ViewModel
             if (CurrentPageIndex < TotalPage)
             {
                 CurrentPageIndex++;
-                UpdateDisplayList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
+                UpdateDataList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
             }
         }
         /// <summary>
@@ -221,7 +241,7 @@ namespace TancleClient.ViewModel
             if (CurrentPageIndex != TotalPage)
             {
                 CurrentPageIndex = TotalPage;
-                UpdateDisplayList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
+                UpdateDataList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
             }
         }
 
@@ -235,19 +255,19 @@ namespace TancleClient.ViewModel
         public void ResetDisplayPage()
         {
             CurrentPageIndex = FirstPageNumber;
-            TotalPage = 0;
+            TotalPage = 1;
             Total = 0;
-            UpdateDisplayList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
+            UpdateDataList(ServiceLocator.Current.GetInstance<IViewModelGetSelectedView>().GetSelectedView());
         }
 
         /// <summary>
         /// Update display content
         /// </summary>
-        public void UpdateDisplayList(IViewModelUpdateDisplayList updateDisplayListImpl)
+        public void UpdateDataList(IViewModelUpdateDisplayList updateDisplayListImpl)
         {
             // Prevnet CurrentPageIndex from 0.
 
-            CurrentPageIndex = CurrentPageIndex == 0 ? FirstPageNumber : CurrentPageIndex;
+            CurrentPageIndex = CurrentPageIndex == 1 ? FirstPageNumber : CurrentPageIndex;
 
             // Get display content
 
@@ -258,7 +278,7 @@ namespace TancleClient.ViewModel
             }
             catch (Exception e)
             {
-                Log.Error(e.Message, e);
+                LogHelper.Log.Error(e.Message, e);
                 total = 0;
             }
 
@@ -268,8 +288,7 @@ namespace TancleClient.ViewModel
             if (total == 0)
             {
                 // there is no content
-
-                TotalPage = 0;
+                TotalPage = 1;
                 //CurrentPageIndex = FirstPageNumber;
                 CurrentPageIndex = TotalPage;
             }
@@ -296,7 +315,7 @@ namespace TancleClient.ViewModel
                     }
                     catch (Exception e)
                     {
-                        Log.Error(e.Message, e);
+                        LogHelper.Log.Error(e.Message, e);
                     }
                 }
             }
@@ -305,6 +324,10 @@ namespace TancleClient.ViewModel
             LastBtnEnable = CurrentPageIndex < TotalPage;
             PrevBtnEnable = FirstBtnEnable && CurrentPageIndex != FirstPageNumber;
             NextBtnEnable = LastBtnEnable && CurrentPageIndex != TotalPage;
+
+            HintText = string.Format(
+                TranslationService.Translate("View_Paginator_HintText")?.ToString(),
+                CurrentPageIndex, TotalPage, Total, ItemPerPage);
         }
 
         #endregion

@@ -9,6 +9,7 @@ namespace TancleClient.ViewModel.Interface
     public interface IViewModelPaginator
     {
         void ResetDisplayPage();
-        void UpdateDisplayList(IViewModelUpdateDisplayList updateDisplayListImpl);
+
+        void UpdateDataList(IViewModelUpdateDisplayList updateDisplayListImpl);
     }
 }

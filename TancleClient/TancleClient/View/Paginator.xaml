@@ -22,18 +22,7 @@
         <Button MinWidth="76" Width="Auto" HorizontalAlignment="Left" Name="BtnPrev" VerticalAlignment="Bottom" Margin="5,0" Command="{Binding PrevCommand}" Content="{l:Translate View_Button_PreviousPage}" IsEnabled="{Binding PrevBtnEnable}" />
         <Button HorizontalAlignment="Left" Name="BtnNext" VerticalAlignment="Bottom" Margin="5,0" Command="{Binding NextCommand}" Content="{l:Translate View_Button_NextPage}" IsEnabled="{Binding NextBtnEnable}" />
         <Button HorizontalAlignment="Left" Name="BtnLast" VerticalAlignment="Bottom" Margin="5,0" Command="{Binding LastCommand}" Content="{l:Translate View_Button_LastPage}" IsEnabled="{Binding LastBtnEnable}" />
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0">
-            <TextBlock Text="{l:Translate View_Paginator_FirstHintText}" />
-            <TextBlock Name="CurrentPage" Text="{Binding CurrentPageIndex}" Padding="2,0" />
-            <TextBlock Name="Textsplitter" Text="/" />
-            <TextBlock Name="TotalPage" Text="{Binding TotalPage}" Padding="2,0" />
-            <TextBlock Text="{l:Translate View_Paginator_SecondHintText}" />
-            <TextBlock Name="Total" Text="{Binding Total}" Padding="2,0" />
-            <TextBlock Text="{l:Translate View_Paginator_ThirdHintText}" />
-            <TextBlock Name="ItemPerPage" Text="{Binding ItemPerPage}" Padding="2,0" />
-            <TextBlock Text="{l:Translate View_Paginator_FourthHintText}" />
-        </StackPanel>
+        <TextBlock Text="{Binding HintText}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
     </StackPanel>
 
 </UserControl>

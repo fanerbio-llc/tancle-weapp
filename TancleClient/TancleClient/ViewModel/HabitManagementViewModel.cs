@@ -1,11 +1,16 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using TancleClient.Service;
+using TancleClient.ViewModel.Interface;
+using TancleDataModel;
+using TancleDataModel.Implementation;
 using TancleDataModel.Model;
 
 namespace TancleClient.ViewModel
@@ -16,8 +21,12 @@ namespace TancleClient.ViewModel
 
         private static readonly ITranslationService TranslationService = ServiceLocator.Current.GetInstance<ITranslationService>();
 
+        private static readonly DataAccessServiceGeneric<TancleConfigDbContext, Habit> DataService = 
+            ServiceLocator.Current.GetInstance<DataAccessServiceGeneric<TancleConfigDbContext, Habit>>();
+
         private ObservableCollection<Habit> _dataList;
         private Habit _selectedItem;
+        private Habit _editItem;
         #endregion
 
         #region Properties bind to view
@@ -41,19 +50,29 @@ namespace TancleClient.ViewModel
                 this.RaisePropertyChanged("SelectedItem");
             }
         }
+
+        public Habit EditItem
+        {
+            get { return _editItem; }
+            set
+            {
+                _editItem = value;
+                this.RaisePropertyChanged("EditItem");
+            }
+        }
         #endregion
 
         #region Constructors
 
         public HabitManagementViewModel()
         {
-            DataList = new ObservableCollection<Habit>()
-            {
-                new Habit {Id=1,HabitNo="B001",HabitName="吸烟",CreatedTime=DateTime.Now,UpdatedTime=DateTime.Now },
-                new Habit {Id=2,HabitNo="B002",HabitName="饮酒",CreatedTime=DateTime.Now,UpdatedTime=DateTime.Now },
-                new Habit {Id=3,HabitNo="B003",HabitName="槟榔",CreatedTime=DateTime.Now,UpdatedTime=DateTime.Now },
-            };
+            CreateCommand = new RelayCommand(BtnCreateClick);
+            DeleteCommand = new RelayCommand(BtnDeleteClick, () => SelectedItem != null);
+            UpdateCommand = new RelayCommand(BtnUpdateClick);
+            CancelCommand = new RelayCommand(BtnCancelClick);
+            ListItemSelectedChangeCommand = new RelayCommand<Habit>(ListItemSelectedChange);
         }
+
         #endregion
 
         #region Override methods
@@ -61,18 +80,161 @@ namespace TancleClient.ViewModel
         public override void DisplayTitle()
         {
             Title = TranslationService.Translate("View_HabitManagement").ToString();
-            SearchHintText = TranslationService.Translate("View_HabitManagement_FindHint").ToString();
-            Icon =
-    "F1 M 38,17C 40.9455,17 43.3333,19.3878 43.3333,22.3333C 43.3333,25.2788 40.9455,27.6667 38,27.6667C 35.0545,27.6667 32.6667,25.2788 32.6667,22.3333C 32.6667,19.3878 35.0545,17 38,17 Z M 32.6666,34.3834C 31.9555,34.7389 30.7833,37.8333 31.4262,38.2501L 27.964,37.6132C 30.3193,36.76 30.7911,35.3344 30.9823,32.7335L 30.8009,31.1163C 31.5744,30.4725 32.7185,29.0501 33.7333,29.0502L 42.2666,29.0502C 43.3037,29.0501 44.2149,29.4913 44.9999,30.1593L 45.4999,32.0001C 45.4999,34.1736 47.1556,34.8271 48.886,35.8798L 46.4666,35.8292C 45.8376,35.8068 45.2551,35.9483 44.7188,36.2059C 44.2645,35.4252 43.7029,34.5682 43.3333,34.3834L 43.4534,37.0835C 41.1956,39.1569 40.0666,43.0679 40.0666,43.0679L 39.6764,45.0053L 38.5333,45.05C 37.7661,45.05 37.0129,44.99 36.2782,44.8745C 35.6933,43.3208 34.4183,40.5162 32.4533,39.2079L 32.6666,34.3834 Z M 24.7333,26.95C 27.6789,26.95 30.0667,29.3378 30.0667,32.2833C 30.0667,35.2288 27.6789,37.6167 24.7333,37.6167C 21.7878,37.6167 19.4,35.2288 19.4,32.2833C 19.4,29.3378 21.7878,26.95 24.7333,26.95 Z M 19.4,44.3333C 18.6889,44.6889 17.2667,47.5333 17.2667,47.5333C 17.2667,47.5333 16.5556,48.6 16.2,52.8666L 13,51.8L 14.0667,46.4667C 14.0667,46.4667 16.2,39 20.4666,39.0001L 28.9999,39.0001C 33.2667,39 35.4,46.4667 35.4,46.4667L 36.4666,51.8L 33.2667,52.8667C 32.9111,48.6 32.2001,47.5333 32.2001,47.5333C 32.2001,47.5333 30.7778,44.6889 30.0667,44.3333L 30.4976,54.0204C 28.8762,54.6529 27.112,55 25.2667,55C 23.0173,55 20.8884,54.4843 18.9918,53.5646L 19.4,44.3333 Z M 51.7333,24.931C 54.6788,25.0359 57.0667,27.5087 57.0667,30.4542C 57.0667,33.3997 54.6788,35.7025 51.7333,35.5977C 48.7878,35.4928 46.4,33.02 46.4,30.0745C 46.4,27.129 48.7878,24.8262 51.7333,24.931 Z M 46.4,42.1245C 45.6889,42.4547 44.2667,45.2485 44.2667,45.2485C 44.2667,45.2485 43.5556,46.2898 43.2,50.5438L 40,49.3632L 41.0667,44.0679C 41.0667,44.0679 43.2,36.6772 47.4666,36.8292L 55.9999,37.133C 60.2667,37.2848 62.4,44.8274 62.4,44.8274L 63.4666,50.1988L 60.2667,51.1515C 59.9111,46.8722 59.2001,45.7802 59.2001,45.7802C 59.2001,45.7802 57.7778,42.8851 57.0667,42.5042L 57.4976,52.2067C 55.8762,52.7814 54.112,53.0657 52.2667,53C 50.0173,52.9199 47.8884,52.3284 45.9918,51.3412L 46.4,42.1245 Z ";
-
+            SearchHintText = TranslationService.Translate("View_HabitManagement_SearchHint").ToString();
+            Icon = "M8.12500953674316,6.24998331069946L8.56711864471436,6.43310880661011 8.75000953674316,6.87498378753662 8.75000953674316,11.2499847412109 11.8750095367432,11.2499847412109 12.3171186447144,11.4331092834473 12.5000095367432,11.8749847412109 12.3171186447144,12.3168592453003 11.8750095367432,12.4999847412109 7.50000905990601,12.4999847412109 7.50000905990601,6.87498378753662 7.68289947509766,6.43310880661011 8.12500953674316,6.24998331069946z M8.12500095367432,4.99999904632568L5.45161914825439,5.54116106033325 3.26602244377136,7.01601457595825 1.79116463661194,9.20161056518555 1.25,11.875 1.79116463661194,14.5483894348145 3.26602244377136,16.7339859008789 5.45161914825439,18.2088375091553 8.12500095367432,18.75 10.7983903884888,18.2088375091553 12.9839859008789,16.7339859008789 14.4588394165039,14.5483894348145 15.0000019073486,11.875 14.4588394165039,9.20161056518555 12.9839859008789,7.01601457595825 10.7983903884888,5.54116106033325 8.12500095367432,4.99999904632568z M7.1881217956543,1.25000011920929L7.1881217956543,1.875 9.0631217956543,1.875 9.0631217956543,1.25000011920929 7.1881217956543,1.25000011920929z M5.9381217956543,0L10.3131217956543,0 10.3131217956543,3.12500023841858 8.7231330871582,3.12500023841858 8.7231330871582,3.77207922935486 8.74920654296875,3.77373743057251 11.6886529922485,4.57400989532471 14.07066822052,6.34304189682007 15.6671514511108,8.85273742675781 16.2500019073486,11.875 15.6104707717896,15.0345230102539 13.8675012588501,17.6174926757813 11.2845325469971,19.360466003418 8.12500095367432,20 4.96546936035156,19.360466003418 2.38250041007996,17.6174926757813 0.639531314373016,15.0345230102539 0,11.875 0.564499914646149,8.89877319335938 2.11328911781311,6.41482830047607 4.42930173873901,4.64022588729858 7.29547214508057,3.79202771186829 7.4731330871582,3.77620100975037 7.4731330871582,3.12500023841858 5.9381217956543,3.12500023841858 5.9381217956543,0z";
         }
 
         public override void UpdateDataList(int pageIndex, out int total, int itemPerPage = 10)
         {
             DataList?.Clear();
-            SelectedItem = null;
 
-            total = 0;
+            IEnumerable<Habit> tempList;
+
+            var searcher = ServiceLocator.Current.GetInstance<IViewModelSearcher>();
+            if (searcher.Search())
+            {
+                var searchText = searcher.GetSearchText();
+                tempList = DataService.LoadPageTuples(
+                    pageIndex,
+                    itemPerPage,
+                    out total,
+                    x => x.HabitName.Contains(searchText),
+                    true,
+                    x => x.HabitNo);
+            }
+            else
+            {
+                tempList = DataService.LoadPageTuples(
+                    pageIndex, 
+                    itemPerPage, 
+                    out total, 
+                    x => x.Id > 0, 
+                    true, 
+                    x => x.HabitNo);
+            }
+
+            if (tempList == null)
+            {
+                DataList = null;
+                return;
+            }
+
+            DataList = new ObservableCollection<Habit>(tempList);
+        }
+        #endregion
+
+        #region Command definitions
+
+        public ICommand CreateCommand { get; private set; }
+
+        public ICommand DeleteCommand { get; private set; }
+
+        public ICommand UpdateCommand { get; private set; }
+
+        public ICommand CancelCommand { get; private set; }
+
+        public ICommand ListItemSelectedChangeCommand { get; private set; }
+        #endregion
+
+        #region Commmand implementations
+
+        private void DeselectItemInDataList()
+        {
+            var tempList = DataList;
+            DataList = null;
+            DataList = tempList;
+        }
+
+        private string GetPlaceHolder()
+        {
+            StringBuilder placeHolder = new StringBuilder();
+            placeHolder.AppendLine($"{TranslationService.Translate("View_HabitManagement_HabitNo")}: {{0}}");
+            placeHolder.AppendLine($"{TranslationService.Translate("View_HabitManagement_HabitName")}: {{1}}");
+            placeHolder.AppendLine($"{TranslationService.Translate("View_Header_CreatedTime")}: {{2}}");
+            placeHolder.AppendLine($"{TranslationService.Translate("View_Header_UpdatedTime")}: {{3}}");
+            return placeHolder.ToString();
+        }
+
+        private void BtnCreateClick()
+        {
+            SelectedItem = null;
+            DeselectItemInDataList();
+            EditItem = new Habit();
+        }
+
+        private void BtnDeleteClick()
+        {
+            if (EditItem == null)
+            {
+                return;
+            }
+
+            if (ServiceLocator.Current.GetInstance<IViewModelDeleteItem>().Delete(
+                dataService: DataService,
+                entityId: EditItem.Id,
+                popUpText: EditItem.ToString(GetPlaceHolder()),
+                popUpConfirm: true))
+            {
+                SelectedItem = null;
+                EditItem = null;
+            }
+
+            ServiceLocator.Current.GetInstance<IViewModelPaginator>().UpdateDataList(this);
+        }
+
+        private void BtnUpdateClick()
+        {
+            if (EditItem == null)
+            {
+                return;
+            }
+
+            if (EditItem.Id == 0)
+            {
+                // Create new item, add create time and update time
+                EditItem.CreatedTime = DateTime.Now;
+                EditItem.UpdatedTime = DateTime.Now;
+            }
+            else {
+                // Update exsist data, modify update time only
+                EditItem.UpdatedTime = DateTime.Now;
+            }
+
+            if (ServiceLocator.Current.GetInstance<IViewModelValidateData>().Validate(EditItem))
+            {
+                var result = EditItem.Id == 0 ?
+                    ServiceLocator.Current.GetInstance<IViewModelAddItem>().Add(
+                        dataService: DataService,
+                        entity: EditItem,
+                        popUpText: EditItem.ToString(GetPlaceHolder()),
+                        popUpConfirm: true)
+                    : ServiceLocator.Current.GetInstance<IViewModelUpdateItem>().Update(
+                        dataService: DataService,
+                        entityId: EditItem.Id,
+                        popUpText: EditItem.ToString(GetPlaceHolder()),
+                        copyImpl: EditItem,
+                        popUpConfirm: true);
+
+                if (result)
+                {
+                    EditItem = null;
+                }
+            }
+
+            ServiceLocator.Current.GetInstance<IViewModelPaginator>().UpdateDataList(this);
+        }
+
+        private void BtnCancelClick()
+        {
+            SelectedItem = null;
+            DeselectItemInDataList();
+            EditItem = null;
+        }
+
+        private void ListItemSelectedChange(Habit habit)
+        {
+            SelectedItem = habit;
+            EditItem = habit?.Clone() as Habit;
         }
         #endregion
     }
