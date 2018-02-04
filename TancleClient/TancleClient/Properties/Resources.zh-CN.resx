@@ -234,6 +234,9 @@
   <data name="View_Messagebox_ExistAlready" xml:space="preserve">
     <value>已存在</value>
   </data>
+  <data name="View_Messagebox_Failure" xml:space="preserve">
+    <value>失败</value>
+  </data>
   <data name="View_Messagebox_QueryDatabaseFailure" xml:space="preserve">
     <value>查询数据库失败！</value>
   </data>
@@ -261,8 +264,17 @@
   <data name="View_SicknessManagement" xml:space="preserve">
     <value>疾病管理</value>
   </data>
+  <data name="View_SicknessManagement_AdviceList" xml:space="preserve">
+    <value>建议列表</value>
+  </data>
+  <data name="View_SicknessManagement_AreaList" xml:space="preserve">
+    <value>区域列表</value>
+  </data>
   <data name="View_SicknessManagement_Detail" xml:space="preserve">
     <value>详细信息</value>
+  </data>
+  <data name="View_SicknessManagement_HabitList" xml:space="preserve">
+    <value>习惯列表</value>
   </data>
   <data name="View_SicknessManagement_SearchHint" xml:space="preserve">
     <value>输入疾病名称查找</value>

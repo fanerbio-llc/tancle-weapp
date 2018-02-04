@@ -47,6 +47,8 @@ namespace TancleDataModel.Model
             destination.SicknessName = SicknessName;
             destination.CreatedTime = CreatedTime;
             destination.UpdatedTime = UpdatedTime;
+
+            // Habits, Areas and Advice area lazy loading, so you have to query them manually later.
         }
 
         public ValidationResults Validate()

@@ -61,6 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccessService\SicknessService.cs" />
+    <Compile Include="IDataAccessService\ISicknessService.cs" />
     <Compile Include="Implementation\DataAccessResult.cs" />
     <Compile Include="Implementation\DataAccessServiceGeneric.cs" />
     <Compile Include="Implementation\BaseDataAccessService.cs" />
@@ -98,10 +100,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataAccessService\" />
-    <Folder Include="IDataAccessService\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\..\Base\BaseComponents\BaseCommonUtils\BaseCommonUtils.csproj">
       <Project>{d9ec32c1-7e1b-4383-b016-a1989782145a}</Project>

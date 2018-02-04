@@ -234,6 +234,9 @@
   <data name="View_Messagebox_ExistAlready" xml:space="preserve">
     <value>Exist Already</value>
   </data>
+  <data name="View_Messagebox_Failure" xml:space="preserve">
+    <value>Failure</value>
+  </data>
   <data name="View_Messagebox_QueryDatabaseFailure" xml:space="preserve">
     <value>Query Database failure!</value>
   </data>
@@ -267,11 +270,20 @@
   <data name="View_SicknessManagement" xml:space="preserve">
     <value>SicknessManagement</value>
   </data>
+  <data name="View_SicknessManagement_AdviceList" xml:space="preserve">
+    <value>Advice List</value>
+  </data>
+  <data name="View_SicknessManagement_AreaList" xml:space="preserve">
+    <value>Area List</value>
+  </data>
   <data name="View_SicknessManagement_Detail" xml:space="preserve">
     <value>Detail</value>
   </data>
   <data name="View_SicknessManagement_FindHint" xml:space="preserve">
     <value>Input sicknetss name to find</value>
+  </data>
+  <data name="View_SicknessManagement_HabitList" xml:space="preserve">
+    <value>Habit List</value>
   </data>
   <data name="View_Validation_AdviceName_Length" xml:space="preserve">
     <value>The length of AdviceName must be 2~200</value>

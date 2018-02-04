@@ -93,23 +93,31 @@ namespace TancleClient.ViewModel
             if (searcher.Search())
             {
                 var searchText = searcher.GetSearchText();
-                tempList = DataService.LoadPageTuples(
+                tempList = DataService.LoadPageTuplesWithRelatedTuples
+                    <string, ICollection<Habit>, ICollection<Advice>, ICollection<Area>, string, string> (
                     pageIndex,
                     itemPerPage,
                     out total,
                     x => x.SicknessName.Contains(searchText),
                     true,
-                    x => x.SicknessNo);
+                    x => x.SicknessNo,
+                    x => x.Habits,
+                    x => x.Advice,
+                    x => x.Areas);
             }
             else
             {
-                tempList = DataService.LoadPageTuples(
+                tempList = DataService.LoadPageTuplesWithRelatedTuples
+                    <string, ICollection<Habit>, ICollection<Advice>, ICollection<Area>, string, string>(
                     pageIndex,
                     itemPerPage,
                     out total,
                     x => x.Id > 0,
                     true,
-                    x => x.SicknessNo);
+                    x => x.SicknessNo,
+                    x => x.Habits,
+                    x => x.Advice,
+                    x => x.Areas);
             }
 
             if (tempList == null)
@@ -159,6 +167,9 @@ namespace TancleClient.ViewModel
             SelectedItem = null;
             DeselectItemInDataList();
             EditItem = new Sickness();
+            ServiceLocator.Current.GetInstance<HabitSicknessViewModel>().ResetItems();
+            ServiceLocator.Current.GetInstance<AdviceSicknessViewModel>().ResetItems();
+            ServiceLocator.Current.GetInstance<AreaSicknessViewModel>().ResetItems();
         }
 
         private void BtnDeleteClick()
@@ -174,11 +185,10 @@ namespace TancleClient.ViewModel
                 popUpText: EditItem.ToString(GetPlaceHolder()),
                 popUpConfirm: true))
             {
-                SelectedItem = null;
-                EditItem = null;
+                BtnCancelClick();
+                ServiceLocator.Current.GetInstance<IViewModelPaginator>().UpdateDataList(this);
             }
 
-            ServiceLocator.Current.GetInstance<IViewModelPaginator>().UpdateDataList(this);
         }
 
         private void BtnUpdateClick()
@@ -203,25 +213,21 @@ namespace TancleClient.ViewModel
             if (ServiceLocator.Current.GetInstance<IViewModelValidateData>().Validate(EditItem))
             {
                 var result = EditItem.Id == 0 ?
-                    ServiceLocator.Current.GetInstance<IViewModelAddItem>().Add(
-                        dataService: DataService,
-                        entity: EditItem,
+                    ServiceLocator.Current.GetInstance<IViewModelUpdateSickness>().AddSickness(
+                        sickness: EditItem,
                         popUpText: EditItem.ToString(GetPlaceHolder()),
                         popUpConfirm: true)
-                    : ServiceLocator.Current.GetInstance<IViewModelUpdateItem>().Update(
-                        dataService: DataService,
-                        entityId: EditItem.Id,
+                    : ServiceLocator.Current.GetInstance<IViewModelUpdateSickness>().UpdateSickness(
+                        sickness: EditItem,
                         popUpText: EditItem.ToString(GetPlaceHolder()),
-                        copyImpl: EditItem,
                         popUpConfirm: true);
 
                 if (result)
                 {
-                    EditItem = null;
+                    BtnCancelClick();
+                    ServiceLocator.Current.GetInstance<IViewModelPaginator>().UpdateDataList(this);
                 }
             }
-
-            ServiceLocator.Current.GetInstance<IViewModelPaginator>().UpdateDataList(this);
         }
 
         private void BtnCancelClick()
@@ -229,12 +235,22 @@ namespace TancleClient.ViewModel
             SelectedItem = null;
             DeselectItemInDataList();
             EditItem = null;
+            ServiceLocator.Current.GetInstance<HabitSicknessViewModel>().ResetItems();
+            ServiceLocator.Current.GetInstance<AdviceSicknessViewModel>().ResetItems();
+            ServiceLocator.Current.GetInstance<AreaSicknessViewModel>().ResetItems();
         }
 
         private void ListItemSelectedChange(Sickness sickness)
         {
             SelectedItem = sickness;
             EditItem = sickness?.Clone() as Sickness;
+
+            if (EditItem != null)
+            {
+                ServiceLocator.Current.GetInstance<HabitSicknessViewModel>().SetCheckedItems(new List<Habit>(SelectedItem.Habits));
+                ServiceLocator.Current.GetInstance<AdviceSicknessViewModel>().SetCheckedItems(new List<Advice>(SelectedItem.Advice));
+                ServiceLocator.Current.GetInstance<AreaSicknessViewModel>().SetCheckedItems(new List<Area>(SelectedItem.Areas));
+            }
         }
         #endregion
     }

@@ -21,4 +21,14 @@
     <DataTemplate DataType="{x:Type vm:SearcherViewModel}">
         <v:Searcher></v:Searcher>
     </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:HabitSicknessViewModel}">
+        <v:DataList></v:DataList>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AdviceSicknessViewModel}">
+        <v:DataList></v:DataList>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AreaSicknessViewModel}">
+        <v:DataList></v:DataList>
+    </DataTemplate>
 </ResourceDictionary>

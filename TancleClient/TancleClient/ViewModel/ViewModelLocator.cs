@@ -22,6 +22,8 @@ using TancleClient.Service;
 using TancleClient.ViewModel.Implementation;
 using TancleClient.ViewModel.Interface;
 using TancleDataModel;
+using TancleDataModel.DataAccessService;
+using TancleDataModel.IDataAccessService;
 using TancleDataModel.Implementation;
 using TancleDataModel.Interface;
 using TancleDataModel.Model;
@@ -56,14 +58,18 @@ namespace TancleClient.ViewModel
                 .As<IViewModelGetSelectedView>()
                 .SingleInstance();
 
-            builder.RegisterType<SicknessManagementViewModel>().As<SicknessManagementViewModel>().SingleInstance();
-            builder.RegisterType<HabitManagementViewModel>().As<HabitManagementViewModel>().SingleInstance();
-            builder.RegisterType<AreaManagementViewModel>().As<AreaManagementViewModel>().SingleInstance();
-            builder.RegisterType<AdviceManagementViewModel>().As<AdviceManagementViewModel>().SingleInstance();
+            builder.RegisterType<SicknessManagementViewModel>().SingleInstance();
+            builder.RegisterType<HabitManagementViewModel>().SingleInstance();
+            builder.RegisterType<AreaManagementViewModel>().SingleInstance();
+            builder.RegisterType<AdviceManagementViewModel>().SingleInstance();
 
             // Components
             builder.RegisterType<SearcherViewModel>().As<SearcherViewModel>().As<IViewModelSearcher>().SingleInstance();
             builder.RegisterType<PaginatorViewModel>().As<PaginatorViewModel>().As<IViewModelPaginator>().SingleInstance();
+
+            builder.RegisterType<HabitSicknessViewModel>().SingleInstance();
+            builder.RegisterType<AdviceSicknessViewModel>().SingleInstance();
+            builder.RegisterType<AreaSicknessViewModel>().SingleInstance();
 
             builder.RegisterType<ViewModelPopUpWindowImpl>()
                 .As<IViewModelConfirmWindow>()
@@ -77,6 +83,8 @@ namespace TancleClient.ViewModel
                 .As<IViewModelDeleteItem>()
                 .As<IViewModelValidateData>()
                 .SingleInstance();
+
+            builder.RegisterType<UpdateSicknessImpl>().As<IViewModelUpdateSickness>().SingleInstance();
             #endregion
 
             #region Register data access service
@@ -87,6 +95,8 @@ namespace TancleClient.ViewModel
             builder.RegisterType<DataAccessServiceGeneric<TancleConfigDbContext, Habit>>().SingleInstance();
             builder.RegisterType<DataAccessServiceGeneric<TancleConfigDbContext, Advice>>().SingleInstance();
             builder.RegisterType<DataAccessServiceGeneric<TancleConfigDbContext, Area>>().SingleInstance();
+
+            builder.RegisterType<SicknessService>().As<ISicknessService>().SingleInstance();
             #endregion
 
             // Perform registrations and build the container. 
@@ -118,6 +128,30 @@ namespace TancleClient.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<PaginatorViewModel>();
+            }
+        }
+
+        public HabitSicknessViewModel HabitSickness
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<HabitSicknessViewModel>();
+            }
+        }
+
+        public AdviceSicknessViewModel AdviceSickness
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<AdviceSicknessViewModel>();
+            }
+        }
+
+        public AreaSicknessViewModel AreaSickness
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<AreaSicknessViewModel>();
             }
         }
     }

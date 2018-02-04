@@ -71,7 +71,7 @@ namespace TancleClient.ViewModel.Implementation
             return rc;
         }
 
-        public bool Update<TDbContext, TEntity>(BaseDataAccessService<TDbContext, TEntity> dataService, int entityId, string popUpText, ICopyable<TEntity> copyImpl, bool popUpConfirm)
+        public bool Update<TDbContext, TEntity>(BaseDataAccessService<TDbContext, TEntity> dataService, int entityId, ICopyable<TEntity> copyImpl, string popUpText, bool popUpConfirm)
             where TDbContext : DbContext
             where TEntity : class
         {

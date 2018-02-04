@@ -130,8 +130,15 @@
     <Compile Include="Utility\MessageBoxManager.cs" />
     <Compile Include="Utility\PasswordBoxHelper.cs" />
     <Compile Include="ViewModel\AdviceManagementViewModel.cs" />
+    <Compile Include="ViewModel\AdviceSicknessViewModel.cs" />
+    <Compile Include="ViewModel\AreaSicknessViewModel.cs" />
+    <Compile Include="ViewModel\DataListItem.cs" />
+    <Compile Include="ViewModel\HabitSicknessViewModel.cs" />
+    <Compile Include="ViewModel\Implementation\DataList.cs" />
+    <Compile Include="ViewModel\Implementation\UpdateSicknessImpl.cs" />
     <Compile Include="ViewModel\Implementation\ViewModelItemOperationImpl.cs" />
     <Compile Include="ViewModel\Implementation\ViewModelPopUpWindowImpl.cs" />
+    <Compile Include="ViewModel\Interface\IDataList.cs" />
     <Compile Include="ViewModel\Interface\IDisplayLanguageChange.cs" />
     <Compile Include="ViewModel\Interface\IViewModelAddItem.cs" />
     <Compile Include="ViewModel\Interface\IViewModelConfirmWindow.cs" />
@@ -143,6 +150,7 @@
     <Compile Include="ViewModel\Interface\IViewModelSearcher.cs" />
     <Compile Include="ViewModel\Interface\IViewModelUpdateDisplayList.cs" />
     <Compile Include="ViewModel\Interface\IViewModelUpdateItem.cs" />
+    <Compile Include="ViewModel\Interface\IViewModelUpdateSickness.cs" />
     <Compile Include="ViewModel\Interface\IViewModelValidateData.cs" />
     <Compile Include="ViewModel\PaginatorViewModel.cs" />
     <Compile Include="ViewModel\SearcherViewModel.cs" />
@@ -156,6 +164,9 @@
     <Compile Include="ViewModel\SicknessManagementViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Converter\StringTrimConverter.cs" />
+    <Compile Include="View\DataList.xaml.cs">
+      <DependentUpon>DataList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Paginator.xaml.cs">
       <DependentUpon>Paginator.xaml</DependentUpon>
     </Compile>
@@ -229,6 +240,10 @@
     <Page Include="Style\ProgressBar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DataList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Paginator.xaml">
       <Generator>MSBuild:Compile</Generator>

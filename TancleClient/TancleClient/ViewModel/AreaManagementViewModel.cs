@@ -210,9 +210,9 @@ namespace TancleClient.ViewModel
                         popUpConfirm: true)
                     : ServiceLocator.Current.GetInstance<IViewModelUpdateItem>().Update(
                         dataService: DataService,
-                        entityId: EditItem.Id,
-                        popUpText: EditItem.ToString(GetPlaceHolder()),
+                        entityId: EditItem.Id, 
                         copyImpl: EditItem,
+                        popUpText: EditItem.ToString(GetPlaceHolder()),
                         popUpConfirm: true);
 
                 if (result)

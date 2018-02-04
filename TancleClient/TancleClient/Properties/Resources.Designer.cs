@@ -412,6 +412,15 @@ namespace TancleClient.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Failure 的本地化字符串。
+        /// </summary>
+        internal static string View_Messagebox_Failure {
+            get {
+                return ResourceManager.GetString("View_Messagebox_Failure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Query Database failure! 的本地化字符串。
         /// </summary>
         internal static string View_Messagebox_QueryDatabaseFailure {
@@ -511,6 +520,24 @@ namespace TancleClient.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Advice List 的本地化字符串。
+        /// </summary>
+        internal static string View_SicknessManagement_AdviceList {
+            get {
+                return ResourceManager.GetString("View_SicknessManagement_AdviceList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Area List 的本地化字符串。
+        /// </summary>
+        internal static string View_SicknessManagement_AreaList {
+            get {
+                return ResourceManager.GetString("View_SicknessManagement_AreaList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Detail 的本地化字符串。
         /// </summary>
         internal static string View_SicknessManagement_Detail {
@@ -525,6 +552,15 @@ namespace TancleClient.Properties {
         internal static string View_SicknessManagement_FindHint {
             get {
                 return ResourceManager.GetString("View_SicknessManagement_FindHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Habit List 的本地化字符串。
+        /// </summary>
+        internal static string View_SicknessManagement_HabitList {
+            get {
+                return ResourceManager.GetString("View_SicknessManagement_HabitList", resourceCulture);
             }
         }
         
